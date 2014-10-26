@@ -7,6 +7,7 @@ class MoviesController < ApplicationController
   end
 
   def index	
+		
 		@hilite = 'hilite'
     columns = {'title'=>'title', 'release_date'=>'release_date'}
 		if params[:sortby].nil?
@@ -14,6 +15,7 @@ class MoviesController < ApplicationController
     elsif columns.has_key?(params[:sortby])
       @sortby = columns[params[:sortby]]
       @movies = Movie.order(@sortby)
+   
     end
   end
 
