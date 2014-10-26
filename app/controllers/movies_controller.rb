@@ -7,15 +7,21 @@ class MoviesController < ApplicationController
   end
 
   def index	
-		@hilite = 'hilite'
-    columns = {'title'=>'title', 'release_date'=>'release_date'}
-		if params[:sortby].nil?
-			@movies=Movie.all
-    elsif columns.has_key?(params[:sortby])
-      @sortby = columns[params[:sortby]]
-      @movies = Movie.order(@sortby)
+    if params[:ratings]
+      @ratings = params[:ratings]
     end
-  end
+    
+    columns = {'title'=>'title', 'release_date'=>'release_date'}
+    if columns.has_key?(params[:sortby])
+      @sortby = columns[params[:sortby]]
+      query = Movie.order(@sortby)
+    else
+      query = Movie
+    end
+
+    @movies = @ratings.nil? ? query.all : query.find_all_by_rating(@ratings.map { |r| r[0] })
+    @all_ratings = Movie.ratings
+ end
 
   def new
     # default: render 'new' template
